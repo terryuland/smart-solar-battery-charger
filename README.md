@@ -111,30 +111,30 @@ Pin Usage
 
 ## Bill of Materials
 
-|	Description	                                                      | Link                                  | Cost     |
-|-------------------------------------------------------------------|---------------------------------------|----------|
-|	Renogy 100W 12 Volt Solar Panel	                                  |	https://www.amazon.com/dp/B07GF5JY35	|	 $ 79.99 |
-|	Renogy Wanderer 10 Amp Charge Controller                          | https://www.amazon.com/dp/B07NPDWZJ7	|	 $ 26.99 |
-|	220x170x110mm Clear Front Junction Box	                          |	https://www.amazon.com/dp/B0828387BM	|	 $ 23.39 |
-|	3 Pack ESP-WROOM-32 Devkit	                                      |	https://www.amazon.com/dp/B08D5ZD528	|	 $ 15.99 |
-|	3 Pack TTL to RS232 Module	                                      |	https://www.amazon.com/dp/B091TN2ZPY	|	 $ 9.99  |
-|	5 Pack DHT11 Module	                                              |	https://www.amazon.com/dp/B01DKC2GQ0	|	 $ 9.99  |
-|	M20 4 Pin 300V 20A Connector	                                    |	https://www.amazon.com/dp/B0CYSQBDVV	|	 $ 17.99 |
-|	2 Pack 15A DPST Toggle Switch	                                    |	https://www.amazon.com/dp/B0CMLB6W73	|	 $ 8.92  |
-|	Right Angle Micro USB Cable	                                      |	https://www.amazon.com/dp/B00S8GU03A	|	 $ 7.99  |
-|	10 Sets 3-Pin (3 Pole) Right Angle Screw Terminal Block Connector	|	https://www.amazon.com/dp/B07SVNGBZ7	|	 $ 7.91  |
-|	10 Pack 6x8cm Protoboard                                          |	https://www.amazon.com/dp/B08WJD7HZ5	|	 $ 11.99 |
-|	Red/Green/Blue/Yellow/White 100 pcs LED Kit	                      |	https://www.amazon.com/dp/B086V2M2TT	|	 $ 5.95  |
-|	1350 pcs Resistor Kit 1%	                                        |	https://www.amazon.com/dp/B07P3MFG5D/	|	 $ 12.99 |
-|	200 pcs 2N394 NPN Transistor	                                    |	https://www.amazon.com/dp/B07T4ZJ76B/	|	 $ 6.99  |
-|	10 Pack 14AWG ATC Fuse Holder	                                    |	https://www.amazon.com/dp/B07426WCLM	|	 $ 7.95  |
-|	10 Pack 50A Alligator Clips	                                      |	https://www.amazon.com/dp/B0773JXZT9	|	 $ 6.40  |
-|	5 Pack MC4 Connector Pairs	                                      |	https://www.amazon.com/dp/B073TX1N5Q	|	 $ 9.99  |
-|	20 Pack 6P6C RJ11 Connector	                                      |	https://www.amazon.com/dp/B07YZ7WHFB	|	 $ 5.79  |
-|	5 Pack ATC 7.5 Amp Fuse	                                          |	https://www.amazon.com/dp/B000G7ALHE	|	 $ 4.98  |
-|	14 AWG Silicone Wire Red & Black 25ft	                            |	https://www.amazon.com/dp/B07FMTCHC1	|	 $ 17.49 |
-|	150 pcs Red 22-16 AWG Heat Shrink #6 Ring Terminal	              |	https://www.amazon.com/dp/B08BLLNH6Q	|	 $ 21.99 |
-|	M2 Standoff Kit	                                                  |	https://www.amazon.com/dp/B0CB89SWW6	|	 $ 9.99  |
+|	Description	                                                      | Link                                  | Cost    |
+|-------------------------------------------------------------------|---------------------------------------|---------|
+|	Renogy 100W 12 Volt Solar Panel	                                  |	https://www.amazon.com/dp/B07GF5JY35	|	 $79.99 |
+|	Renogy Wanderer 10 Amp Charge Controller                          | https://www.amazon.com/dp/B07NPDWZJ7	|	 $26.99 |
+|	220x170x110mm Clear Front Junction Box	                          |	https://www.amazon.com/dp/B0828387BM	|	 $23.39 |
+|	3 Pack ESP-WROOM-32 Devkit	                                      |	https://www.amazon.com/dp/B08D5ZD528	|	 $15.99 |
+|	3 Pack TTL to RS232 Module	                                      |	https://www.amazon.com/dp/B091TN2ZPY	|	 $9.99  |
+|	5 Pack DHT11 Module	                                              |	https://www.amazon.com/dp/B01DKC2GQ0	|	 $9.99  |
+|	M20 4 Pin 300V 20A Connector	                                    |	https://www.amazon.com/dp/B0CYSQBDVV	|	 $17.99 |
+|	2 Pack 15A DPST Toggle Switch	                                    |	https://www.amazon.com/dp/B0CMLB6W73	|	 $8.92  |
+|	Right Angle Micro USB Cable	                                      |	https://www.amazon.com/dp/B00S8GU03A	|	 $7.99  |
+|	10 Sets 3-Pin (3 Pole) Right Angle Screw Terminal Block Connector	|	https://www.amazon.com/dp/B07SVNGBZ7	|	 $7.91  |
+|	10 Pack 6x8cm Protoboard                                          |	https://www.amazon.com/dp/B08WJD7HZ5	|	 $11.99 |
+|	Red/Green/Blue/Yellow/White 100 pcs LED Kit	                      |	https://www.amazon.com/dp/B086V2M2TT	|	 $5.95  |
+|	1350 pcs Resistor Kit 1%	                                        |	https://www.amazon.com/dp/B07P3MFG5D/	|	 $12.99 |
+|	200 pcs 2N394 NPN Transistor	                                    |	https://www.amazon.com/dp/B07T4ZJ76B/	|	 $6.99  |
+|	10 Pack 14AWG ATC Fuse Holder	                                    |	https://www.amazon.com/dp/B07426WCLM	|	 $7.95  |
+|	10 Pack 50A Alligator Clips	                                      |	https://www.amazon.com/dp/B0773JXZT9	|	 $6.40  |
+|	5 Pack MC4 Connector Pairs	                                      |	https://www.amazon.com/dp/B073TX1N5Q	|	 $9.99  |
+|	20 Pack 6P6C RJ11 Connector	                                      |	https://www.amazon.com/dp/B07YZ7WHFB	|	 $5.79  |
+|	5 Pack ATC 7.5 Amp Fuse	                                          |	https://www.amazon.com/dp/B000G7ALHE	|	 $4.98  |
+|	14 AWG Silicone Wire Red & Black 25ft	                            |	https://www.amazon.com/dp/B07FMTCHC1	|	 $17.49 |
+|	150 pcs Red 22-16 AWG Heat Shrink #6 Ring Terminal	              |	https://www.amazon.com/dp/B08BLLNH6Q	|	 $21.99 |
+|	M2 Standoff Kit	                                                  |	https://www.amazon.com/dp/B0CB89SWW6	|	 $9.99  |
 
 - Solder
 - ~1ft of CAT5/6/etc
