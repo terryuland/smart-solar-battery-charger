@@ -1,0 +1,403 @@
+esphome:
+  name: solar-charge-controller
+  friendly_name: Solar Charge Controller
+  on_boot:
+    - priority: -100
+      then:
+      - switch.turn_on: red_led
+      - switch.turn_on: green_led
+      - switch.turn_on: blue_led
+      - switch.turn_on: yellow_led
+      - delay: 2s
+      - switch.turn_off: red_led
+      - switch.turn_off: green_led
+      - switch.turn_off: blue_led
+      - switch.turn_off: yellow_led
+
+globals:
+  - id: overpower
+    type: bool
+    initial_value: 'false'      
+  - id: chargererror
+    type: bool
+    initial_value: 'false'      
+  - id: modbuserror
+    type: bool
+    initial_value: 'false'      
+  - id: apierror
+    type: bool
+    initial_value: 'false'
+
+script:
+  - id: update_yellow_led
+    then:
+      - component.update: yellow_led_error_state
+      - lambda: |-
+          if (id(overpower) || id(chargererror) || id(modbuserror) || id(apierror)) {
+            id(yellow_led).turn_on();
+          }
+          else {
+            id(yellow_led).turn_off();
+          }
+
+
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+interval:
+  - interval: 15s
+    then:
+      if:
+        condition:
+          wifi.connected:
+        then:
+          - switch.turn_on: blue_led
+          - if:
+              condition:
+                api.connected:
+              then:
+                - lambda: |-
+                    id(apierror) = false;
+                    id(update_yellow_led).execute();
+              else:
+                - lambda: |-
+                    id(apierror) = true;
+                    id(update_yellow_led).execute();
+        else:
+          - switch.turn_off: blue_led
+
+
+
+# Example configuration entry
+sensor:
+  - platform: dht
+    pin: 4
+    temperature:
+      name: "Temperature"
+    humidity:
+      name: "Humidity"
+    update_interval: 60s
+
+  - id: battery_soc
+    name: Battery SoC
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0100
+    unit_of_measurement: '%'
+    register_type: holding
+    value_type: U_WORD
+    accuracy_decimals: 0
+
+  - id: battery_voltage
+    name: Battery Voltage
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0101
+    unit_of_measurement: V
+    register_type: holding
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1
+
+  - id: battery_current
+    name: Battery Current
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0102
+    unit_of_measurement: A
+    register_type: holding
+    value_type: U_WORD
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.01  
+    on_value:
+      then:
+        - lambda: |-
+            auto current = (float)id(battery_current).state;
+            if (current > 0) {
+              id(red_led).turn_on();
+            }
+            else {
+              id(red_led).turn_off();
+            }
+
+
+  - id: controller_temperature
+    name: Controller Temp
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0103
+    bitmask: 0xFF00
+    filters:
+    - lambda: return x * (9.0/5.0) + 32.0;
+    unit_of_measurement: '°F'
+    register_type: holding
+    value_type: S_WORD
+    accuracy_decimals: 1
+
+  - id: load_voltage
+    name: Load Voltage
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0104
+    unit_of_measurement: V
+    register_type: holding
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1
+
+  - id: load_current
+    name: Load Current
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0105
+    unit_of_measurement: A
+    register_type: holding
+    value_type: U_WORD
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.01
+
+  - id: load_power
+    name: Load Power
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0106
+    unit_of_measurement: W
+    register_type: holding
+    value_type: U_WORD
+    accuracy_decimals: 1
+
+  - id: solar_voltage
+    name: PV Voltage
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0107
+    unit_of_measurement: V
+    register_type: holding
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1
+
+  - id: solar_current
+    name: PV Current
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0108
+    unit_of_measurement: A
+    register_type: holding
+    value_type: U_WORD
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.01
+
+  - id: solar_power
+    name: PV Power
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0109
+    unit_of_measurement: W
+    register_type: holding
+    value_type: U_WORD
+    accuracy_decimals: 1
+
+  - id: charging_state
+    name: charging_state
+    entity_category: diagnostic
+    internal: true
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0120
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    accuracy_decimals: 0
+    on_value:
+      then:
+        - component.update: wanderer_charging_state
+        - lambda: |-
+            auto current_state = (int)id(charging_state).state;
+            if (current_state == 0) {
+              id(overpower) = false;
+              id(update_yellow_led).execute();
+            }
+            else if (current_state >= 6) {
+              id(overpower) = true;
+              id(update_yellow_led).execute();
+            }
+            else if (current_state == 5) {
+              id(green_led).turn_on();
+              id(overpower) = false;
+              id(update_yellow_led).execute();
+            }
+            else {
+              id(green_led).turn_off();
+              id(overpower) = false;
+              id(update_yellow_led).execute();
+            }
+
+  - id: error_state
+    name: error_state
+    entity_category: diagnostic
+    internal: true
+    platform: modbus_controller
+    modbus_controller_id: renogy
+    address: 0x0121
+    register_type: holding
+    value_type: U_WORD
+    accuracy_decimals: 0
+    on_value:
+      then:
+        - component.update: wanderer_error_state
+    on_value_range:
+      - above: 0
+        then:
+          - lambda: |-
+              id(chargererror) = true;
+              id(update_yellow_led).execute();
+      - below: 1
+        then:
+          - lambda: |-
+              id(chargererror) = false;
+              id(update_yellow_led).execute();
+
+
+text_sensor:
+  - id: wanderer_charging_state
+    name: Charging State
+    platform: template
+    icon: mdi:battery-charging
+    lambda: |-
+      auto current_state = (int)id(charging_state).state;
+      if (current_state == 0) return {"Not Charging"}; 
+      if (current_state == 1) return {"Charging"};
+      if (current_state == 2) return {"Power Point Tracking"};
+      if (current_state == 3) return {"Equalizing"};
+      if (current_state == 4) return {"Boosting"};
+      if (current_state == 5) return {"Floating"};
+      if (current_state == 6) return {"Overpower"};
+      return {};
+
+  - id: wanderer_error_state
+    name: Wanderer Error State
+    platform: template
+    icon: mdi:alert
+    lambda: |-
+      auto current_state = (int)id(error_state).state;
+      if (current_state == 0) return {"Normal"};
+      if (current_state == 1) return {"Battery Over-Discharge"};
+      if (current_state == 2) return {"Battery Over-Voltage"};
+      if (current_state == 4) return {"Battery Under-Voltage"};
+      if (current_state == 8) return {"Load Short Circuit"};
+      if (current_state == 16) return {"Load Over-Power/Over-Current"};
+      if (current_state == 32) return {"Controller Over-Temperature"};
+      if (current_state == 64) return {"Ambient Over-Temperature"};
+      if (current_state == 128) return {"Solar Over-Power"};
+      if (current_state == 256) return {"Solar Short Circuit"};
+      if (current_state == 512) return {"Solar Over-Voltage"};
+      if (current_state == 1024) return {"Solar Counter Current"};
+      if (current_state == 2048) return {"Solar Working Point Over-Voltage"};
+      if (current_state == 4096) return {"Solar Reverse Connection"};
+      if (current_state == 8192) return {"Anti-Reverse MOS Short Circuit"};
+      if (current_state == 16384) return {"Charge MOS Short Circuit"};
+      return {};  
+
+  - id: yellow_led_error_state
+    name: Yellow LED Error State
+    platform: template
+    icon: mdi:alert
+    lambda: |-
+      if (id(overpower)) return {"Charging State Over Power"};
+      if (id(chargererror)) return {"Charger Error"};
+      if (id(modbuserror)) return {"Modbus Error"};
+      if (id(apierror)) return {"API Error"};
+      return {"Normal"};  
+
+# Example configuration entry
+uart:
+  tx_pin: 17
+  rx_pin: 16
+  baud_rate: 9600
+
+modbus:
+  send_wait_time: 150ms
+
+modbus_controller:
+  - id: renogy
+    address: 0xFF
+    setup_priority: -10
+    update_interval: 15s
+    on_online:
+      then:
+        - lambda: |-
+            id(modbuserror) = false;
+            id(update_yellow_led).execute();
+    on_offline:
+      then:
+        - lambda: |-
+            id(modbuserror) = true;
+            id(update_yellow_led).execute();
+
+
+
+switch:
+  - platform: gpio
+    pin: 13
+    id: red_led
+  - platform: gpio
+    pin: 18
+    id: green_led
+  - platform: gpio
+    pin: 19
+    id: blue_led
+  - platform: gpio
+    pin: 23
+    id: yellow_led
+
+# light:
+#   - platform: binary
+#     name: "Red LED"
+#     output: red_led
+#   - platform: binary
+#     name: "Green LED"
+#     output: green_led
+#   - platform: binary
+#     name: "Blue LED"
+#     output: blue_led
+#   - platform: binary
+#     name: "Yellow LED"
+#     output: yellow_led
+
+binary_sensor:
+  - platform: switch
+    source_id: red_led
+    name: "Charging"
+  - platform: switch
+    source_id: green_led
+    name: "Charged"
+  - platform: switch
+    source_id: yellow_led
+    name: "Error"
+
+button:
+  - platform: restart
+    name: "Reboot"
