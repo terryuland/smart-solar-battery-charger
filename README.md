@@ -3,7 +3,7 @@ Portable solar battery charger that works with Home Assistant
 
 <img alt="Smart Solar Battery Charger" src="solarchargerpic.png">
 
-This project extends the Renogy Wanderer Solar Charge Controller into a portable weather resistant smart battery charger that integrates into Home Assistant. In the YouTube video linked below I have documented this project start to finish, including:
+This project extends the Renogy Wanderer Solar Charge Controller into a portable weather resistant smart battery charger that integrates into Home Assistant. In the [YouTube video](https://youtu.be/ki-TSnWV6Pk) linked below I have documented this project start to finish, including:
 - Testing the Wanderer
 - Installing Home Assistant
 - Installing ESPHome on an ESP32 microcontroller
