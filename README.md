@@ -17,7 +17,7 @@ This project extends the Renogy Wanderer Solar Charge Controller into a portable
 - Notifications
 - Field testing
 
-<img alt="Smart Solar Battery Charger Video Thumbnail" src="Solar%20Battery%20Charger%20Thumbnail.png">
+[<img alt="Smart Solar Battery Charger Video Thumbnail" src="Solar%20Battery%20Charger%20Thumbnail.png">](https://youtu.be/ki-TSnWV6Pk)
 
 ## Sketch
 <img alt="Rough Sketch" src="Solar%20Charger%20Sketch.png">
